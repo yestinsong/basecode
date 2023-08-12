@@ -58,9 +58,8 @@ class RacePromptUpgrade(object):
         return ":".join(select_prompt_list)
         
           
-    def append_race_prompt(self, input_prompt, race_key, seed = 0):
+    def append_race_prompt(self, race_key, seed = 0):
         """
-        :input_prompt 上游处理完毕的基础prompt。
         :race_key 需要转换的目标race类型，注意race_key 需要跟 race_json 中的key名字保持一致
         :seed 当不传递或者设置为0的时候，系统自己随机产生；当为了仿真等应用需要固定seed以对比的时候，可传入一个非0数值，系统按照传入的seed处理随机
         
@@ -70,7 +69,7 @@ class RacePromptUpgrade(object):
         2th ele：返回的内容
         """
         
-        ret_list = [-1,"", input_prompt]
+        ret_list = [-1,"", ""]
         
         ##判断race key 是否合法
         if race_key not in self.race_info_index:
@@ -79,11 +78,6 @@ class RacePromptUpgrade(object):
             return tuple(ret_list)
         race_info = self.race_info_index[race_key]
     
-    
-        ##预处理input_prompt
-        input_prompt = input_prompt.strip()
-        if len(input_prompt) != 0 and input_prompt[-1] != ',':
-            input_prompt = input_prompt + ','
             
        
         ##构建返回的list，并且将稳定append的token list加进去
@@ -97,7 +91,7 @@ class RacePromptUpgrade(object):
         ##整合返回信息
         ret_list[0] = 1
         ret_list[1] = ""
-        ret_list[2] = input_prompt + ",".join(append_list)
+        ret_list[2] = ",".join(append_list)
         
         return tuple(ret_list)
     
@@ -105,7 +99,7 @@ class RacePromptUpgrade(object):
 ###demo case
 rpu = RacePromptUpgrade()
 rpu.load_race_json(conf_data_str)
-print(rpu.append_race_prompt("beautiful girl, masterpiece, relax, looking at camera ","Celtic"))
+print(rpu.append_race_prompt("Celtic"))
         
         
         
